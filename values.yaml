@@ -1,0 +1,58 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/sethforprivacy/simple-monerod
+  pullPolicy: IfNotPresent
+  tag: "v0.18.5.4"
+
+# By default, run a full node that does not advertise to the
+# public, with restricted RPC
+args:
+  - "--rpc-restricted-bind-ip=0.0.0.0"
+  - "--rpc-restricted-bind-port=18089"
+  - "--no-igd"
+  - "--no-zmq"
+  - "--enable-dns-blocklist"
+  - "--ban-list=/home/monero/ban_list.txt"
+
+# By default 18081 (mainnet), 28081 (testnet), 38081 (stagenet).
+service:
+  type: NodePort
+  ports:
+    # P2P port (Node communication)
+    # 18080 (mainnet), 28080 (testnet), 38080 (stagenet)
+    - port: 18080
+
+    # RPC port (wallet operations)
+    # For restricted RPC: 18089 (mainnet), 28089 (testnet), 38089 (stagenet)
+    # For unrestricted RPC: 18081 (mainnet), 28081 (testnet), 38081 (stagenet)
+    - port: 18089
+
+volumes:
+   - name: monero-data
+     hostpath:
+       path: /var/lib/monerod
+       type: DirectoryOrCreate
+
+volumeMounts:
+   - name: monero-data
+     mountPath: "/home/monero/.bitmonero"
+     readOnly: false
+
+serviceAccount:
+  create: false
+
+podSecurityContext: {}
+
+# The container needs to run as root to set ownership of the hostpath volume.
+# Restrict its privileges to only run the needed commands.
+securityContext:
+  capabilities:
+  drop:
+    - ALL
+  add:
+    - CHOWN
+    - SETUID
+    - SETGID
+  runAsUser: 0
+  runAsNonRoot: false

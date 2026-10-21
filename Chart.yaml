@@ -1,0 +1,9 @@
+apiVersion: v2
+name: monerod
+description: A Helm chart for monerod
+type: application
+
+version: 0.1.0
+appVersion: "1.16.0"
+
+icon: https://www.getmonero.org/press-kit/symbols/monero-symbol-480.png
