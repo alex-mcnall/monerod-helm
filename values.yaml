@@ -21,12 +21,17 @@ service:
   ports:
     # P2P port (Node communication)
     # 18080 (mainnet), 28080 (testnet), 38080 (stagenet)
-    - port: 18080
+    - name: p2p-port
+      port: 18080
+      targetPort: 18080
 
     # RPC port (wallet operations)
     # For restricted RPC: 18089 (mainnet), 28089 (testnet), 38089 (stagenet)
     # For unrestricted RPC: 18081 (mainnet), 28081 (testnet), 38081 (stagenet)
-    - port: 18089
+    # Make sure this matches the RPC port specified in args:
+    - name: rpc-port
+      port: 18089
+      targetPort: 18089
 
 volumes:
    - name: monero-data
