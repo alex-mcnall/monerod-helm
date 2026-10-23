@@ -3,7 +3,7 @@ name: monerod
 description: A Helm chart for monerod
 type: application
 
-version: 0.1.1
+version: 0.1.2
 appVersion: "v0.18.5.4"
 
 icon: https://www.getmonero.org/press-kit/symbols/monero-symbol-480.png
